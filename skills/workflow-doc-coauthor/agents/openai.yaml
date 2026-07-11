@@ -1,4 +1,0 @@
-interface:
-  display_name: "Workflow Doc Coauthor"
-  short_description: "Draft durable workflow docs"
-  default_prompt: "Use $workflow-doc-coauthor to turn this workflow into durable documentation."

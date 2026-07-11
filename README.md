@@ -17,14 +17,8 @@ private/brand-specific coupling, so each one is genuinely reusable on your own p
 | [`scroll-world`](skills/scroll-world/) | Scroll-scrubbed "fly through the world" cinematic landing pages (Higgsfield). | Building a scroll-driven camera-flight page with seamless seams, plus real iOS/mobile video-decoder fixes. Adapts the scroll-world plugin (MIT) with two production patches. |
 | [`website-design`](skills/website-design/) | Modern web/UI design direction for landing pages, SaaS, portfolios. | A repeatable method for current, non-generic web design: design theses, dials, pattern stacks, and an anti-AI-slop QA pass. |
 | [`goal-setter`](skills/goal-setter/) | Turns a vague ask into a bounded, checkable task contract. | A reusable framework for scoping agent work so it stays on-rails and verifiable. |
-| [`brand-name-search`](skills/brand-name-search/) | Evaluates brand names, domains, and social handles. | A screening workflow (with a probe script) for finding an ownable, available name. |
 | [`cinematic-photo-prompts`](skills/cinematic-photo-prompts/) | Documentary "non-AI-looking" photo-prompt craft. | Lens, blocking, and lighting recipes that make generated stills read like real photographs. |
 | [`study-scraping`](skills/study-scraping/) | Public-web/social research-collection pipeline. | A structured, rate-limit-aware approach to collecting and studying source material at scale. |
-| [`mcp-server-builder`](skills/mcp-server-builder/) | Design and debug MCP (Model Context Protocol) servers. | Tool-API design principles: high-level tools, gated destructive actions, machine-readable blockers. |
-| [`workflow-doc-coauthor`](skills/workflow-doc-coauthor/) | Co-author SOPs, PRDs, and decision records. | Writing operational docs that lead with the answer and separate facts, decisions, and open questions. |
-| [`social-media-scheduler`](skills/social-media-scheduler/) | Draft and schedule posts to Threads/IG/X. | Wiring an agent to social APIs safely, with env-var tokens and dry-run-first defaults. |
-| [`minimax-m3-audio`](skills/minimax-m3-audio/) | MiniMax M3 chat + text-to-speech via the API. | A clean wrapper pattern for an OpenAI-compatible LLM + TTS provider, keyed entirely by env vars. |
-| [`aihot`](skills/aihot/) | Queries a public AI-news REST API for a Chinese-language digest. | A model example of a **no-MCP, curl-a-public-API** skill — no keys, no server, just HTTP. |
 
 ## Using a skill
 

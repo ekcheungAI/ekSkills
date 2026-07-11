@@ -1,4 +1,0 @@
-interface:
-  display_name: "Brand Name Search"
-  short_description: "Check brand names, domains, and social handles."
-  default_prompt: "Search this brand name for domain availability, social username availability, and naming conflicts."
