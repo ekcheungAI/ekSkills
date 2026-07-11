@@ -7,10 +7,15 @@ Every skill here is a self-contained `SKILL.md` (plus optional `references/`, `s
 `agents/`). They follow the portable Agent-Skill format, so they work across Claude Code,
 Codex CLI, Cursor, and any compatible agent runtime.
 
-This repo is a *curated* selection, not a dump — only original skills, cleaned of any
-private/brand-specific coupling, so each one is genuinely reusable on your own projects.
+This repo is a *curated* selection, not a dump. Two parts:
 
-## Skills
+1. **Our skills** — original work by @ekcheungAI, cleaned of any private/brand-specific
+   coupling, so each one is reusable on your own projects.
+2. **[Recommended skills](#recommended-skills-third-party)** — great skills by *other*
+   authors that we use and endorse. We don't host their code; we link to the source and
+   credit the maker. Go star their repos.
+
+## Our skills
 
 | Skill | What it does | What you'll learn |
 |---|---|---|
@@ -19,6 +24,48 @@ private/brand-specific coupling, so each one is genuinely reusable on your own p
 | [`goal-setter`](skills/goal-setter/) | Turns a vague ask into a bounded, checkable task contract. | A reusable framework for scoping agent work so it stays on-rails and verifiable. |
 | [`cinematic-photo-prompts`](skills/cinematic-photo-prompts/) | Documentary "non-AI-looking" photo-prompt craft. | Lens, blocking, and lighting recipes that make generated stills read like real photographs. |
 | [`study-scraping`](skills/study-scraping/) | Public-web/social research-collection pipeline. | A structured, rate-limit-aware approach to collecting and studying source material at scale. |
+
+## Recommended skills (third-party)
+
+Skills we reach for that we **didn't** write. These belong to their authors under their own
+licenses — this is a recommendation list, not a re-host. Install them from the source.
+
+### Design & UI
+- **[taste-skill](https://github.com/Leonxlnx/taste-skill)** (Leonxlnx) and
+  **[ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)**
+  (nextlevelbuilder) — the anti-slop design system behind skills like `taste-skill`,
+  `soft-skill`, `brutalist-skill`, `minimalist-skill`, `image-to-code`, `redesign`,
+  `imagegen-frontend-web/-mobile`, `stitch`, `gpt-taste`. Our own `website-design` skill
+  studied these; credit where due.
+
+### Agent methodology & workflow
+- **[superpowers](https://github.com/obra/superpowers)** (Jesse Vincent / obra) — the
+  composable-skills framework that ships `brainstorming`, `test-driven-development`,
+  `systematic-debugging`, `using-git-worktrees`, `writing-plans`, `subagent-driven-development`,
+  the code-review skills, and more. The most-starred Claude Code skills repo, and deservedly so.
+
+### Understand a codebase
+- **[Understand-Anything](https://github.com/Egonex-AI/Understand-Anything)** — turns any repo
+  into an interactive knowledge graph (`understand`, `understand-chat`, `understand-dashboard`,
+  and the rest of that family).
+
+### Documents, browser & integrations
+- **[anthropics/skills](https://github.com/anthropics/skills)** — Anthropic's official Agent
+  Skills: `pdf`, `docx`, `pptx`, `xlsx`, the `playwright` browser toolkit, and the Apache-2.0
+  example skills.
+- **[Scrapling](https://github.com/D4Vinci/Scrapling)** (Karim Shoair, BSD-3) — adaptive web
+  scraping with a built-in MCP server.
+- **[Context7](https://github.com/upstash/context7)** (Upstash) — pulls up-to-date library
+  docs into the agent's context.
+
+### Built into your agent already
+Skills like `create-hook`, `create-rule`, `create-skill`, `create-subagent`, `cursor-sdk`,
+`migrate-to-skills`, `figma-implement-design`, `gh-fix-ci`, `gh-address-comments`, `yeet`,
+`split-to-prs`, `sentry`, `vercel-deploy`, and `chronicle` ship **built in** with
+[Cursor](https://cursor.com) / Claude Code — no separate install needed. Use them from there.
+
+> Attribution note: these names are trademarks/works of their respective authors. If you
+> maintain one of these and want the link changed or removed, open an issue.
 
 ## Using a skill
 
