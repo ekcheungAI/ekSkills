@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goal Setter"
+  short_description: "Draft bounded agent goals"
+  default_prompt: "Use $goal-setter to turn this request into a bounded /goal with verification, boundaries, stop conditions, and pause conditions."

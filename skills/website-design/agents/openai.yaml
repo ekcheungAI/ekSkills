@@ -1,0 +1,4 @@
+interface:
+  display_name: "Website Design"
+  short_description: "Modern web design and visual research"
+  default_prompt: "Use $website-design to design or review a contemporary website experience."

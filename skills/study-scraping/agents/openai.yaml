@@ -1,0 +1,8 @@
+interface:
+  display_name: "Study Scraping"
+  short_description: "Collect public TikHub and web evidence into research cards"
+  brand_color: "#2563EB"
+  default_prompt: "Use $study-scraping to collect public evidence into a research.v1 packet."
+
+policy:
+  allow_implicit_invocation: true

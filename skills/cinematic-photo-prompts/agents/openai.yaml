@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cinematic Photo Prompts"
+  short_description: "Prompt iPhone-style founder photo stills"
+  default_prompt: "Use the cinematic-photo-prompts skill to write a cinematic iPhone-style photo prompt for this scene, including camera lens, shooting angle, subject blocking, and negative prompts."
