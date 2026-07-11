@@ -3,6 +3,8 @@
 A small, curated set of **Agent Skills** by [@ekcheungAI](https://github.com/ekcheungAI) —
 published so others can **use them and learn from them**.
 
+> 🇭🇰 中文介紹 + 我推薦嘅 skills（設計 / 動畫 / 編程 / 研究）：**[ekcheung.com/skills](https://www.ekcheung.com/skills/)**
+
 Every skill here is a self-contained `SKILL.md` (plus optional `references/`, `scripts/`,
 `agents/`). They follow the portable Agent-Skill format, so they work across Claude Code,
 Codex CLI, Cursor, and any compatible agent runtime.
@@ -37,6 +39,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
   `soft-skill`, `brutalist-skill`, `minimalist-skill`, `image-to-code`, `redesign`,
   `imagegen-frontend-web/-mobile`, `stitch`, `gpt-taste`. Our own `website-design` skill
   studied these; credit where due.
+
+### Animation
+- **[GSAP Skills](https://github.com/greensock/gsap-skills)** (GreenSock, official) — teaches
+  agents to use GSAP correctly: timelines, ScrollTrigger, plugins, React/Vue. The go-to for web
+  animation.
 
 ### Agent methodology & workflow
 - **[superpowers](https://github.com/obra/superpowers)** (Jesse Vincent / obra) — the
