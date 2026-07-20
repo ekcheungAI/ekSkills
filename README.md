@@ -65,6 +65,9 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 - **[Context7](https://github.com/upstash/context7)** (Upstash) — pulls up-to-date library
   docs into the agent's context.
 
+### Skills Radar picks
+<!-- skills-radar: recommendations -->
+
 ### Built into your agent already
 Skills like `create-hook`, `create-rule`, `create-skill`, `create-subagent`, `cursor-sdk`,
 `migrate-to-skills`, `figma-implement-design`, `gh-fix-ci`, `gh-address-comments`, `yeet`,
