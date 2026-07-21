@@ -67,6 +67,8 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[ai-harness-doctor](https://github.com/NieZhuZhu/ai-harness-doctor)** (NieZhuZhu, MIT) — 🩺 Doctor for your repo's AI harness — audit, merge & drift-guard scattered agent configs (AGENTS.md / CLAUDE.md / .cursorrules) into one source of truth. Real evals: 6/28 → 28/28 correct, −27% latency. Field-tested on react, vscode, n8n + 11 more. Claude Code · Codex · Cursor · Gemini
+- **[dingtalk-mentions](https://github.com/WenbingYu2020/dingtalk-mentions)** (WenbingYu2020, MIT) — 钉钉 @我 消息抓取器 — 自动汇总到 AI 表格 (GUI + Claude Code Skill)
 
 ### Built into your agent already
 Skills like `create-hook`, `create-rule`, `create-skill`, `create-subagent`, `cursor-sdk`,
