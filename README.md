@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[plugins](https://github.com/9uiLe/plugins)** (9uiLe, MIT) — Claude Code 用プラグインを集めた Marketplace。tech-docs（ADR / 技術仕様書 / 汎用ドキュメントを 1 枚 HTML で生成）と quality-architect（ISO/IEC 25010 でアーキテクチャ設計 / コードレビュー）を収録。
+- **[horosa-skill](https://github.com/Horace-Maxwell/horosa-skill)** (Horace-Maxwell, AGPL-3.0) — Offline-capable AI skill for Astrology, Bazi, Ziwei, etc. 让你的AI本地挂载一个玄学家
+- **[agent-delivery-harness](https://github.com/weijen/agent-delivery-harness)** (weijen, MIT) — GitHub + Azure oriented worktree harness for AI coding agents, with Python, Terraform, CI, and PR gates.
+- **[agents_pipeline](https://github.com/bohewu/agents_pipeline)** (bohewu, MIT) — Codex-first multi-agent workflow toolkit with global skills, workspace-local model profiles, a runtime-neutral core, and Claude Code/Copilot exports.
+- **[autospec](https://github.com/berlinguyinca/autospec)** (berlinguyinca, MIT) — AI workflow skills for turning specs into GitHub issue trees, model-sized implementation tasks, autonomous PRs, and cited repo story/state reports across Codex, Claude Code, and OpenCode.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
