@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills)** (K-Dense-AI, MIT) — Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 160,000+ scientists worldwide. 148 ready-to-use skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard.
+- **[muxy](https://github.com/muxy-app/muxy)** (muxy-app, MIT) — Lightweight and Memory efficient terminal for Mac built with SwiftUI and libghostty
+- **[llm-swarm-router](https://github.com/matthewdcage/llm-swarm-router)** (matthewdcage, MIT) — Run the LLM Swarm Router on machines to distribute Local Ai to the Swarm - More Machines - MORE SPEED
+- **[claude-workflow](https://github.com/hschwane/claude-workflow)** (hschwane, MIT) — Professional AI-assisted software development workflow plugin for Claude Code
+- **[oh-my-cassette](https://github.com/Cassette-Editor/oh-my-cassette)** (Cassette-Editor, MIT) — 你的随身 AI 剪辑搭档| Your Pocket AI Co-editor for Video Montage
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
