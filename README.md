@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[moai-adk](https://github.com/modu-ai/moai-adk)** (modu-ai, Apache-2.0) — SPEC-First Agentic Development Kit for Claude Code — 24 AI agents + 52 skills with TDD/DDD quality gates, 16-language projects, 4-language docs. Go CLI, zero deps.
+- **[ase](https://github.com/rse/ase)** (rse, Apache-2.0) — Agentic Software Engineering (ASE)
+- **[ai-skills](https://github.com/lgtm-hq/ai-skills)** (lgtm-hq, MIT) — Canonical Agent Skills library for Claude Code, Cursor, Codex, and other agents.
+- **[igapyon-agent-skills](https://github.com/igapyon/igapyon-agent-skills)** (igapyon, Apache-2.0) — A personal repository for managing Agent Skills used for Japanese Note/Qiita   article writing, companion-style technical and music post writing, GitHub text   drafting, and Mikuku character-agent workflows.
+- **[claude-plugins-validation](https://github.com/Emasoft/claude-plugins-validation)** (Emasoft, MIT) — Comprehensive validation suite for Claude Code plugins, marketplaces, hooks, skills, and MCP servers
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
