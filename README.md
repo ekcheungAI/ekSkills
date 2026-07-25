@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[obsidian-second-brain](https://github.com/eugeniughelbur/obsidian-second-brain)** (eugeniughelbur, MIT) — Cross-CLI skill for Obsidian: turn your vault into a living AI-first second brain across Claude Code, Codex, Gemini, OpenCode, Antigravity, Hermes, and Pi. 45 commands - self-rewriting notes, hybrid semantic search, key-less web research, /obsidian-architect codebase docs, and scheduled agents that maintain the vault while you sleep.
+- **[ai-image-master](https://github.com/2799662352/ai-image-master)** (2799662352, MIT) — AI Image Master - Electron desktop application for AI image generation with multiple models support (Gemini, Seedream, Sora, Flux)
+- **[agentic-packages](https://github.com/srobroek/agentic-packages)** (srobroek, Apache-2.0) — Review the upstream SKILL.md before installation.
+- **[tale](https://github.com/tale-project/tale)** (tale-project, MIT) — The Orchestrator for AI Agents — Connect OpenClaw, Hermes Agent, Claude Code, Codex, Cursor, Gemini CLI, OpenCode, and Pi. Pool their knowledge, delegate tasks, and build your swarm of agents.
+- **[UIdetox](https://github.com/OJamals/UIdetox)** (OJamals, MIT) — Detox & Elevate your AI-generated frontend
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
