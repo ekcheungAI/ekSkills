@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[myco](https://github.com/goondocks-co/myco)** (goondocks-co, Apache-2.0) — Myco is the nervous system for AI-assisted software teams. Works automatically alongside the coding agents, subagents, and agent teams you already use
+- **[overdeck](https://github.com/eltmon/overdeck)** (eltmon, MIT) — Multi-agent orchestration for AI coding assistants
+- **[zAI-Skills](https://github.com/Aznatkoiny/zAI-Skills)** (Aznatkoiny, MIT) — Claude Code plugin marketplace — AI/ML toolkit, consulting frameworks, and real estate investment analysis
+- **[skill-md-inspector](https://github.com/Krusty84/skill-md-inspector)** (Krusty84, MIT) — Write, validate, and compare Agent Skills without leaving Visual Studio Code. SKILL.md Inspector gives every file named exactly SKILL.md live feedback, guided fixes, readable reports, and workspace-wide collision checks.
+- **[aimeat-protocol](https://github.com/miikkij/aimeat-protocol)** (miikkij, MIT) — Open protocol and reference node where humans, their AI agents, and local LLMs share apps, knowledge, and capabilities. Self-hosted, federated, MIT.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
