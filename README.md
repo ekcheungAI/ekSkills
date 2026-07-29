@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[medsci-skills](https://github.com/Aperivue/medsci-skills)** (Aperivue, MIT) — Agent Skills for medical research — literature search, reporting-guideline & citation checks, statistics, publication figures, submission. Works with Claude Code, Codex, Cursor & GitHub Copilot. Built by a physician-researcher, tested on real publications. MIT.
+- **[wizard](https://github.com/PostHog/wizard)** (PostHog, MIT) — Quickly add PostHog to your project using the setup wizard ✨
+- **[opengeni](https://github.com/Cloudgeni-ai/opengeni)** (Cloudgeni-ai, Apache-2.0) — Open, self-hostable agentic runtime for organizations — durable, replayable agent sessions, human approvals, governed credentials and memory, running in managed sandboxes or on your own hardware. Apache-2.0.
+- **[ai-config](https://github.com/Morrison-Lab/ai-config)** (Morrison-Lab, MIT) — Portable AI agent config — skills, memories, and commands synced across machines via git
+- **[skills](https://github.com/llodev/skills)** (llodev, MIT) — Collection of Agent Skills for Claude Code, Cursor, Codex, Windsurf, and any agent that speaks the open   Skills spec. Ships via npm + plugin + skills add.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
