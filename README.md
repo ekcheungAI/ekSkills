@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[prflow](https://github.com/The01Geek/prflow)** (The01Geek, MIT) — Turn feature requests into review-ready pull requests: issue, implementation, tests, a review-and-fix loop, and docs. Runs locally or on GitHub Actions, and is built for complex brownfield repos. Each week its retrospective reads what you actually merged and proposes improvements to your skill extensions.
+- **[xmarks](https://github.com/arazvan-ec/xmarks)** (arazvan-ec, MIT) — Review the upstream SKILL.md before installation.
+- **[docflow](https://github.com/EvolveHQ/docflow)** (EvolveHQ, MIT) — ADR-driven documentation workflow for the Claude Code and pi coding agents: scaffold and manage Architecture Decision Records (ADRs), a plan queue, and AGENTS.md conventions — a bootstrap skill plus lifecycle skills to author, queue, ship, and audit ADRs.
+- **[SKILL.md-Inspector](https://github.com/Krusty84/SKILL.md-Inspector)** (Krusty84, MIT) — Write, validate, and review Agent SKILL.md's directly in Visual Studio Code.  SKILL.md Inspector provides live diagnostics for every file named exactly SKILL.md, guided quick fixes, detailed reports, and workspace-wide checks for naming and scope conflicts.
+- **[agent-skills](https://github.com/SurgePix/agent-skills)** (SurgePix, MIT) — Official SurgePix skills for AI coding agents — file upload, background removal, and more. Compatible with Claude Code, Codex CLI, Cursor, Gemini CLI, and any SKILL.md-compatible agent.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
