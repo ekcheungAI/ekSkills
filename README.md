@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[vellum-assistant](https://github.com/vellum-ai/vellum-assistant)** (vellum-ai, MIT) — An AI Assistant that’s easy to setup, does your work 24/7, knows your preferences and gets better over time.
+- **[comfy-cli](https://github.com/Comfy-Org/comfy-cli)** (Comfy-Org, GPL-3.0) — CLI for using ComfyUI
+- **[powerpacks](https://github.com/powerset-co/powerpacks)** (powerset-co, MIT) — Review the upstream SKILL.md before installation.
+- **[orama-system](https://github.com/diazMelgarejo/orama-system)** (diazMelgarejo, MIT) — ὅραμα: The complete agent methodology for solving impossible problems with elegance.
+- **[ai-skills](https://github.com/lgtm-hq/ai-skills)** (lgtm-hq, MIT) — Canonical Agent Skills library for Claude Code, Cursor, Codex, and other agents.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
