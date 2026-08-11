@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[graphforge](https://github.com/CurateLabs/graphforge)** (CurateLabs, Apache-2.0) — An embedded, openCypher-compatible graph workspace for Python, Node, (Swift, and Kotlin coming soon)
+- **[tend](https://github.com/max-sixty/tend)** (max-sixty, MIT) — Claude-powered CI workflows for GitHub repositories
+- **[prism-coder](https://github.com/dcostenco/prism-coder)** (dcostenco, Apache-2.0) — Persistent session memory for AI coding agents — local-first, with on-device inference, associative recall, and drift detection. Works with Claude Code, Cursor, and Codex.
+- **[anvil](https://github.com/rjwalters/anvil)** (rjwalters, MIT) — AI-powered artifact creation using filesystem versioning as the coordination layer
+- **[CCC](https://github.com/hanrry2323/CCC)** (hanrry2323, MIT) — CCC — Connect–Claude Code. Loop Engineer: Hub for intent, Engine for autonomous orchestration. Task→tool routing; Skill+Prompt=unlimited roles.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
