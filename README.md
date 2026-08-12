@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[megalinter](https://github.com/oxsecurity/megalinter)** (oxsecurity, AGPL-3.0) — 🦙 MegaLinter analyzes 50 languages, 22 formats, 21 tooling formats, excessive copy-pastes, spelling mistakes and security issues in your repository sources with a GitHub Action, other CI tools or locally.
+- **[KiroCrew](https://github.com/kirodotdev/KiroCrew)** (kirodotdev, Apache-2.0) — A persistent workspace for development work that self-improves and continues beyond one session.
+- **[Tlamatini](https://github.com/XAIHT/Tlamatini)** (XAIHT, MIT) — Tlamatini is a self-hosted AI developer assistant for local or cloud LLMs: hybrid RAG (FAISS+BM25) over your codebase, a 100+ tool Multi-Turn engine, an 86-agent visual workflow designer, 28 SKILL.md skills, a universal MCP client, and ACPX, a runtime for external coding agents like Claude Code, Codex, Cursor and Gemini CLI.
+- **[claude-skills](https://github.com/kevin-burns/claude-skills)** (kevin-burns, MIT) — A small collection of MIT-licensed Claude Code skills that I build
+- **[wow-my-zsh](https://github.com/OpenSIN-Code/wow-my-zsh)** (OpenSIN-Code, MIT) — Canonical config for all AI coding agents (claude code / codex / opencode / cline) — instructions, MCPs, hooks, loops, skills. Author once, transpile everywhere.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
