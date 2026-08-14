@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[axi](https://github.com/kunchenguid/axi)** (kunchenguid, MIT) — Design principles for agent ergonomics. Higher accuracy with lower token cost than both MCP and regular CLI.
+- **[CCC](https://github.com/hanrry2323/CCC)** (hanrry2323, MIT) — CCC — Connect–Claude Code. Loop Engineer: Hub for intent, Engine for autonomous orchestration. Task→tool routing; Skill+Prompt=unlimited roles.
+- **[agent-skills](https://github.com/ktaroabobon/agent-skills)** (ktaroabobon, MIT) — Agent Skills (SKILL.md) for Claude Code / Codex — repo onboarding toolkit
+- **[mind](https://github.com/star-ga/mind)** (star-ga, Apache-2.0) — The native language for intelligent systems - Machine Intelligence Native Design
+- **[adversarial-review](https://github.com/SathiaAI/adversarial-review)** (SathiaAI, MIT) — Multi-model adversarial code review with a deterministic, machine-computed release verdict. Portable agent skill for Claude Code, OpenAI Codex, and any SKILL.md-compatible platform.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
