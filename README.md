@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[KiroCrew](https://github.com/kirodotdev/KiroCrew)** (kirodotdev, Apache-2.0) — A persistent workspace for development work that self-improves and continues beyond one session.
+- **[EGC](https://github.com/Fmarzochi/EGC)** (Fmarzochi, Apache-2.0) — EGC gives every AI coding agent the same brain. Shared memory, skills, and live context across Cursor, Claude Code, Copilot, Aider, and 20+ AI coding tools with zero configuration. Every tab, terminal, and AI stays automatically synchronized. One brain. Everywhere.
+- **[CoursIA](https://github.com/jsboige/CoursIA)** (jsboige, MIT) — Dépôt contenant les ressources et TPs d'un cours en IA en C# et en Python
+- **[Intentloom](https://github.com/vitala89/Intentloom)** (vitala89, MIT) — Vendor-neutral local framework and CLI for defining, validating, and synchronizing engineering intent across AI coding tools. Offline-first and non-destructive.
+- **[opendigitalproductfactory](https://github.com/OpenDigitalProductFactory/opendigitalproductfactory)** (OpenDigitalProductFactory, Apache-2.0) — This is the official open digital product factory
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
