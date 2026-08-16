@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[librefang](https://github.com/librefang/librefang)** (librefang, MIT) — LibreFang is an open-source agent operating system written in Rust. Live demo: https://flyio.librefang.ai
+- **[claude_skills](https://github.com/Jamie-BitFlight/claude_skills)** (Jamie-BitFlight, MIT) — Plugins for Anthropic's Claude Code, Codex, Cursor and more
+- **[agent-ready-repo](https://github.com/eugenelim/agent-ready-repo)** (eugenelim, Apache-2.0) — The complete AI operating model for software teams — from first idea to production. Three peer-supervised loops (discovery → build → release) over a catalogue of curated packs: skills, subagents, and hooks, each installed in one line. It's npm for your coding agent. Any agent, any stack — Claude Code, Codex, Cursor, Copilot, Gemini, Kiro.
+- **[Tlamatini](https://github.com/XAIHT/Tlamatini)** (XAIHT, MIT) — Tlamatini is a self-hosted AI developer assistant for local or cloud LLMs: hybrid RAG (FAISS+BM25) over your codebase, a 100+ tool Multi-Turn engine, an 86-agent visual workflow designer, 28 SKILL.md skills, a universal MCP client, and ACPX, a runtime for external coding agents like Claude Code, Codex, Cursor and Gemini CLI.
+- **[yarramate](https://github.com/yarrasys/yarramate)** (yarrasys, MIT) — Give your coding agents correct architecture context: design declared once in git, mechanically checked, drift-detected, and rendered into verified briefs
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
