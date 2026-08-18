@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills)** (K-Dense-AI, MIT) — Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 175,000+ scientists worldwide. 163 ready-to-use validated skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard.
+- **[relay](https://github.com/AgentWorkforce/relay)** (AgentWorkforce, Apache-2.0) — Real time communication for agents. Wake on message, channels, DMs and actions. Useful for orchestrating agents.
+- **[text-watermark-studio](https://github.com/mrmixx-max/text-watermark-studio)** (mrmixx-max, MIT) — Detect, clean, and dilute AI text watermarks, unicode/stego signals, and style markers. FastAPI service, CLI, fully local, MIT.
+- **[build-loop](https://github.com/tyroneross/build-loop)** (tyroneross, Apache-2.0) — Orchestrated 5-phase dev loop plugin for Claude Code — Assess → Plan → Execute → Review → Iterate (+ optional Learn)
+- **[skillhawk](https://github.com/Berserk-hub150/skillhawk)** (Berserk-hub150, MIT) — Catch dangerous AI agent skills before they catch you. Zero-dependency security scanner for Agent Skills, SKILL.md and MCP configs.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
