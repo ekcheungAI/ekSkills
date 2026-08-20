@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[SkillSpector](https://github.com/NVIDIA/SkillSpector)** (NVIDIA, Apache-2.0) — Security scanner for AI agent skills. Detect vulnerabilities, malicious patterns, security risks, prompt injection, data exfiltration, and supply-chain risks in Claude Code, Codex, and MCP skills before you install them.
+- **[coga](https://github.com/FastJVM/coga)** (FastJVM, AGPL-3.0) — A blackboard for humans and agents
+- **[newt-agent](https://github.com/Gilamonster-Foundation/newt-agent)** (Gilamonster-Foundation, Apache-2.0) — experimental agentic coder for ollama, llama.cpp, and vLLM ... inference you OWN
+- **[tadeumendonca-skills](https://github.com/tedeuxx/tadeumendonca-skills)** (tedeuxx, MIT) — A Claude Code harness — subagent review personas, permission hooks that deny the irreversible floor, and a generic skill library.
+- **[oduncu](https://github.com/erayendes/oduncu)** (erayendes, MIT) — Silent-executor skill for coding agents. Give it a task, it says "yaparım...", works, says "tamam." Nothing in between — no explanation, no summary, no progress notes. One SKILL.md for Claude Code, Codex, Cursor, Gemini and the Agent Skills standard.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
