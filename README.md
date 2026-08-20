@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[daikenja](https://github.com/by-carlos/daikenja)** (by-carlos, MIT) — Not an assistant — a sage you consult in the shape of a Claude Code plugin. It knows your work, the work around you, and where to go next.
+- **[plot](https://github.com/plot-pm/plot)** (plot-pm, CC0-1.0) — Git-native planning workflow for software development
+- **[Tlamatini](https://github.com/XAIHT/Tlamatini)** (XAIHT, MIT) — Tlamatini is a self-hosted AI developer assistant for local or cloud LLMs: hybrid RAG (FAISS+BM25) over your codebase, a 100+ tool Multi-Turn engine, an 86-agent visual workflow designer, 28 SKILL.md skills, a universal MCP client, and ACPX, a runtime for external coding agents like Claude Code, Codex, Cursor and Gemini CLI.
+- **[floh-skills](https://github.com/ASNNetworks/floh-skills)** (ASNNetworks, MIT) — Agent Skills by FLOH. Portable SKILL.md capabilities for Claude Code, Codex, Gemini CLI, Cursor and other agent clients.
+- **[agent-stack](https://github.com/ssheleg/agent-stack)** (ssheleg, MIT) — Production patterns for building AI agent orchestrators — and for billing the LLM access they burn.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
