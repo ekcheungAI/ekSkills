@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[tons-of-skills-marketplace](https://github.com/jeremylongshore/tons-of-skills-marketplace)** (jeremylongshore, MIT) — 471 plugins, 3,069 skills, 347 agents for Claude Code. Open-source marketplace at tonsofskills.com with the ccpi CLI package manager.
+- **[qa-buddy-skills](https://github.com/TimothyHan/qa-buddy-skills)** (TimothyHan, Apache-2.0) — Your little QA buddy can help you with QA practices
+- **[monolithic-code-review-toolkit](https://github.com/Monolith-INC/monolithic-code-review-toolkit)** (Monolith-INC, MIT) — Code review skills for every stage of the work lifecycle: task, user story, feature, and pull request comment handling. A portable Agent Plugins v1.0.0 plugin for Claude Code, Cursor and Codex.
+- **[jig](https://github.com/0x0w1/jig)** (0x0w1, MIT) — same cut, every project — repository procedures installed as skills into Claude Code, Codex, and Antigravity, with the repository state converged to match.
+- **[coding-friend](https://github.com/dinhanhthi/coding-friend)** (dinhanhthi, MIT) — Lean toolkit for disciplined engineering workflows with Claude Code.
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
