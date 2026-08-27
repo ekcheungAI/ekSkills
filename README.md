@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[vellum-assistant](https://github.com/vellum-ai/vellum-assistant)** (vellum-ai, MIT) — An AI Assistant that’s easy to setup, does your work 24/7, knows your preferences and gets better over time.
+- **[letta-code](https://github.com/letta-ai/letta-code)** (letta-ai, Apache-2.0) — Stateful agents that are like people, with memory, identity, and the ability to learn and adapt
+- **[jaz-ai](https://github.com/teamtinvio/jaz-ai)** (teamtinvio, MIT) — Complete agent stack for Jaz. Plugins, Skills, MCP tools, and CLI for Claude Code, Cowork, Codex, Copilot, Cursor, and more.
+- **[whetstone](https://github.com/zaffnet/whetstone)** (zaffnet, MIT) — My macOS setup as a chezmoi repo, a Copier template for Python projects, and the skills and hooks I use with Claude Code, Codex, and Cursor.
+- **[cuecards](https://github.com/opencue/cuecards)** (opencue, MIT) — Agent profile manager for Claude Code & Codex. Per-directory profiles select which skills, MCP servers, and plugins load — automatically, before launch. Install: npm install -g cue-ai
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
