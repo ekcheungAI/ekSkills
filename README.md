@@ -67,6 +67,11 @@ licenses — this is a recommendation list, not a re-host. Install them from the
 
 ### Skills Radar picks
 <!-- skills-radar: recommendations -->
+- **[skillhawk](https://github.com/Berserk-hub150/skillhawk)** (Berserk-hub150, MIT) — Catch dangerous AI agent skills before they catch you. Zero-dependency security scanner for Agent Skills, SKILL.md and MCP configs.
+- **[pm-skill](https://github.com/bendusz/pm-skill)** (bendusz, GPL-3.0) — A Project/Product Manager skill for Claude Code: Claude orchestrates delivery — discover, plan, sign-off, then build/review/ship via subagents.
+- **[knowledge-delta-skills](https://github.com/sergeyizmailov/knowledge-delta-skills)** (sergeyizmailov, MIT) — Agent Skills (SKILL.md) for Claude Code, Codex, Cursor, and Gemini CLI — only the expertise a frontier model doesn't already reliably know.
+- **[Major-AI-Skills](https://github.com/alivirgo/Major-AI-Skills)** (alivirgo, MIT) — Installable agentic skills (SKILL.md) for Claude Code, Cursor, Codex, Gemini & Antigravity — 292+ product, efficiency, and common-sense skills. npx major-ai-skills
+- **[humanizer-ru](https://github.com/Vladimir-Human/humanizer-ru)** (Vladimir-Human, MIT) — Нормализация и диагностика русского текста: артефакты копипасты, типографика без правки смысла, детектор связок со статусом домена. Числа — в реестре фактов с эрратой. Не для английского, кода, юрдокументов и художественной прозы
 - **[open-design](https://github.com/nexu-io/open-design)** (nexu-io, Apache-2.0) — 本地優先嘅開源 design workspace，可用 Claude Code、Codex、Cursor 等 agent 產生多種設計資產。
 - **[claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)** (fcakyon, Apache-2.0) — 跨 Claude Code、Codex、Cursor 嘅 configs、plugins、hooks 同 agents 集合。
 - **[agnix](https://github.com/agent-sh/agnix)** (agent-sh, Apache-2.0) — 檢查 AGENTS.md、CLAUDE.md、SKILL.md、hooks 同 MCP 嘅 linter／LSP。
