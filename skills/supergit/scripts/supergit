@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# supergit shim — `supergit <verb> …` from anywhere. Python does the work.
+exec python3 "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/supergit.py" "$@"
