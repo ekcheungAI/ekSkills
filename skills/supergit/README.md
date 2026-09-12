@@ -77,7 +77,7 @@ Every verb accepts `--json`. Every reply ends **Done / Waiting / You decide**.
 | **Sync** | Bring the library up to the latest merged state. Safe by construction — it can never lose work. | fast-forward |
 | **Park** | Save work-in-progress to its branch and pause. The room stays. | WIP commit + push |
 | **Note** | A thought you want kept but not acted on now. Surfaces later as "follow-ups". | — |
-| **Label** | The one name a piece of work goes by: on the room, on the session, and as a `Supergit-Room:` trailer on every commit it ships. `label "…"` sets it — a harness-made worktree (Claude Code opens its own per session) becomes a room the first time it's labelled. | sidecar `task` |
+| **Label** | The one name a piece of work goes by: on the room, on the session, and as a `Supergit-Room:` trailer on every commit it ships. `label "…"` sets it — a harness-made worktree (Claude Code opens its own per session) becomes a room the first time it's labelled. The session title gets the same short name, then a `· PR #N` appended the moment `ship` opens one, so the sidebar itself says what's done and what's still in flight. | sidecar `task` |
 | **Direct push** | A commit that reached the library's main branch without a PR — nothing reviewed it, nothing gated it. `audit` lists any from the last 24h; `brief` counts them. | push to `main` |
 | **Rescue branch** | A backup branch made before a room is removed, so nothing is ever lost. | `rescue/*` |
 | **Foreign room** | A room the steward didn't create. Reported, never touched unless you say so. | — |
