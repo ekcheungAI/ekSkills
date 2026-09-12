@@ -1,5 +1,5 @@
 {
-  "_comment": "projects: every repo supergit stewards (`supergit init <path> --register` adds one). guarded_libraries: main checkouts the Claude Code PreToolUse hook refuses to edit outside a room; SUPERGIT_GUARD_ALL=1 guards every listed project. SUPERGIT_PROJECTS=/a:/b adds projects without editing this file.",
+  "_comment": "projects: every repo supergit stewards (`supergit init <path> --register` adds one); add \"dev_port\": <number> to an entry once you know the project's local dev port, so two rooms never guess the same one. guarded_libraries: main checkouts the Claude Code PreToolUse hook refuses to edit outside a room; SUPERGIT_GUARD_ALL=1 guards every listed project. SUPERGIT_PROJECTS=/a:/b adds projects without editing this file.",
   "projects": [],
   "guarded_libraries": [],
   "default_ttl_hours": 12,

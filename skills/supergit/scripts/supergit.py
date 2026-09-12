@@ -222,7 +222,8 @@ def registry_projects() -> list[dict]:
         seen.add(full)
         pid = proj.get("id") if isinstance(proj, dict) else None
         out.append({"id": pid or slugify(full.name), "name": proj.get("name", full.name) if isinstance(proj, dict) else full.name,
-                    "origin": proj.get("origin") if isinstance(proj, dict) else None, "path": full})
+                    "origin": proj.get("origin") if isinstance(proj, dict) else None,
+                    "dev_port": proj.get("dev_port") if isinstance(proj, dict) else None, "path": full})
     return out
 
 
@@ -268,6 +269,7 @@ class Room:
     untracked: int = 0
     unpushed: int = 0
     processes: int = 0
+    ports: list = field(default_factory=list)  # TCP ports this room's own processes are listening on
     age_h: float | None = None
     exists: bool = True
     nested: bool = False
@@ -325,15 +327,65 @@ def list_rooms(repo: Repo, probe: bool = True) -> list[Room]:
         x.nested = any(other != x.path and str(x.path).startswith(str(other) + "/") for other in paths)
     if probe:
         procs = process_table()
+        ports_by_cmd = dev_ports()
         targets = [x for x in rooms if x.exists and x.kind != "library"]
         with ThreadPoolExecutor(max_workers=8) as pool:
-            list(pool.map(lambda x: probe_room(repo, x, procs), targets))
+            list(pool.map(lambda x: probe_room(repo, x, procs, ports_by_cmd), targets))
     return rooms
 
 
 def process_table() -> str:
     proc = sh(["ps", "-eo", "args"], check=False)
     return proc.stdout or ""
+
+
+def dev_ports() -> dict[str, list[int]]:
+    """Full command line -> the TCP ports that process (or one of its
+    ancestors) is listening on. A dev server commonly re-execs into a title
+    that drops its own launch path (Next's "next-server (vX)" is exactly
+    this) — the path only survives on the parent that launched it — so a
+    listening PID with no path of its own inherits its nearest ancestor's."""
+    lsof_out = sh(["lsof", "-iTCP", "-sTCP:LISTEN", "-n", "-P"], check=False, timeout=15).stdout
+    ports_by_pid: dict[str, list[int]] = {}
+    for line in lsof_out.splitlines()[1:]:
+        parts = line.split()
+        if len(parts) < 9:
+            continue
+        pid, addr = parts[1], parts[8]
+        port = addr.rsplit(":", 1)[-1]
+        if port.isdigit():
+            ports_by_pid.setdefault(pid, []).append(int(port))
+    if not ports_by_pid:
+        return {}
+    ps_out = sh(["ps", "-wweo", "pid=,ppid=,args="], check=False).stdout
+    args_by_pid: dict[str, str] = {}
+    ppid_by_pid: dict[str, str] = {}
+    for line in ps_out.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        pid, _, rest = line.partition(" ")
+        ppid, _, args = rest.strip().partition(" ")
+        args_by_pid[pid] = args
+        ppid_by_pid[pid] = ppid
+
+    def command_chain(pid: str) -> str:
+        """This process's args, plus its ancestors' — up to 8 hops, enough
+        for any real launcher chain (shell -> npm -> next -> next-server)."""
+        seen, chain, current = set(), [], pid
+        for _ in range(8):
+            if current in seen or current not in args_by_pid:
+                break
+            seen.add(current)
+            chain.append(args_by_pid[current])
+            current = ppid_by_pid.get(current, "")
+        return " ".join(chain)
+
+    result: dict[str, list[int]] = {}
+    for pid, ports in ports_by_pid.items():
+        chain = command_chain(pid)
+        result[chain] = sorted(set(result.get(chain, []) + ports))
+    return result
 
 
 def classify(repo: Repo, path: Path, sidecars: dict) -> str:
@@ -350,7 +402,7 @@ def classify(repo: Repo, path: Path, sidecars: dict) -> str:
         return "foreign"
 
 
-def probe_room(repo: Repo, room: Room, procs: str | None = None) -> None:
+def probe_room(repo: Repo, room: Room, procs: str | None = None, ports_by_cmd: dict | None = None) -> None:
     status = git(["status", "--porcelain"], cwd=room.path, check=False)
     lines = [l for l in status.splitlines() if l.strip()]
     room.untracked = sum(1 for l in lines if l.startswith("??"))
@@ -358,6 +410,8 @@ def probe_room(repo: Repo, room: Room, procs: str | None = None) -> None:
     room.unpushed = count_unpushed(room.path, room.branch)
     needle = f"{room.path}/"
     room.processes = procs.count(needle) if procs is not None else count_processes(room.path)
+    if ports_by_cmd:
+        room.ports = sorted({p for cmd, ps in ports_by_cmd.items() if needle in cmd for p in ps})
 
 
 def count_unpushed(path: Path, branch: str | None) -> int:
@@ -615,6 +669,15 @@ def verb_status(args) -> Report:
         for a, b, shared in overlaps[:2]:
             r.decide.append(f"`{a.label}` and `{b.label}` both touch {len(shared)} file(s) — same task, or will one conflict the other on ship?")
 
+    collisions = port_collisions(others)
+    if collisions:
+        r.detail.append("")
+        r.detail.append(f"⚠️  {len(collisions)} room(s) show the same port — only one can actually own it:")
+        for a, b, port in collisions:
+            r.detail.append(f"   `{a.label}` × `{b.label}` — both show :{port}")
+        for a, b, port in collisions[:2]:
+            r.decide.append(f"`{a.label}` and `{b.label}` both show :{port} — one is stale; which one is actually running? (`lsof -i :{port}`)")
+
     if lib["ahead"] and lib["unique_ahead"] == 0:
         r.detail.append(f"   ℹ️ the {lib['ahead']} local commit(s) already exist on origin in equivalent form — `sync --reset-equivalent` is lossless")
     if lib["behind"] and not lib["dirty_tracked"] and not lib["ahead"]:
@@ -633,9 +696,24 @@ def verb_status(args) -> Report:
     return r
 
 
+def port_collisions(rooms: list[Room]) -> list[tuple[Room, Room, int]]:
+    """Two different rooms whose own processes are listening on the identical
+    port — the OS lets only one actually own it, so this means one is stale
+    (crashed and never noticed) or a session is unknowingly talking to
+    another room's server instead of its own."""
+    live = [x for x in rooms if x.exists and x.kind != "library" and x.ports]
+    found = []
+    for i, a in enumerate(live):
+        for b in live[i + 1:]:
+            shared = set(a.ports) & set(b.ports)
+            for port in shared:
+                found.append((a, b, port))
+    return found
+
+
 def room_dict(x: Room) -> dict:
     return {"path": str(x.path), "kind": x.kind, "branch": x.branch, "head": x.head, "dirty": x.dirty_tracked,
-            "untracked": x.untracked, "unpushed": x.unpushed, "processes": x.processes, "age_h": x.age_h,
+            "untracked": x.untracked, "unpushed": x.unpushed, "processes": x.processes, "ports": x.ports, "age_h": x.age_h,
             "expired": x.expired, "exists": x.exists, "nested": x.nested,
             "task": (x.sidecar or {}).get("task"), "agent": (x.sidecar or {}).get("agent")}
 
@@ -650,6 +728,8 @@ def room_line(x: Room) -> str:
         flags.append(f"{x.unpushed} unpushed" if x.branch else f"{x.unpushed} commit(s) not on main")
     if x.processes:
         flags.append(f"{x.processes} proc")
+    if x.ports:
+        flags.append("port " + ",".join(str(port) for port in x.ports))
     if x.nested:
         flags.append("NESTED")
     if x.expired:
@@ -1190,6 +1270,7 @@ def verb_brief(args) -> Report:
         stuck = [x for x in rooms if x.kind in ("supergit", "claude-native") and x.expired and (not x.clean or x.unpushed)]
         sweepable = [x for x in rooms if x.kind == "supergit" and x.expired and x.clean and x.unpushed == 0 and x.processes == 0]
         overlaps = find_overlaps(rooms)
+        collisions = port_collisions(rooms)
         line = f"   {p['id']:<14} lib {lib['behind']}↓/{lib['ahead']}↑"
         if lib["dirty_tracked"]:
             line += f" ⚠️dirty({lib['dirty_tracked']})"
@@ -1200,6 +1281,8 @@ def verb_brief(args) -> Report:
             line += f" · {len(sweepable)} sweepable"
         if overlaps:
             line += f" · ⚠️{len(overlaps)} overlapping"
+        if collisions:
+            line += f" · ⚠️{len(collisions)} port clash"
         ds = deploy_state(repo)
         pushes = direct_pushes(repo) if ds else []
         if ds:
@@ -1241,6 +1324,8 @@ def verb_brief(args) -> Report:
             r.decide.append(f"{p['id']}: {len(sweepable)} room(s) expired & clean — `clean up`?")
         for a, b, shared in overlaps[:1]:
             r.decide.append(f"{p['id']}: `{a.label}` and `{b.label}` touch {len(shared)} shared file(s) — worth a look before either ships")
+        for a, b, port in collisions[:1]:
+            r.decide.append(f"{p['id']}: `{a.label}` and `{b.label}` both show :{port} — one is stale, check before trusting either")
         if lib["behind"] and not lib["dirty_tracked"] and not lib["ahead"]:
             r.decide.append(f"{p['id']} library {lib['behind']} behind — `sync`? (yes/no)")
         if lib["dirty_tracked"]:
@@ -1505,6 +1590,11 @@ def verb_audit(args) -> Report:
         origin = git(["remote", "get-url", "origin"], cwd=lib, check=False)
         check(origin.rstrip("/").removesuffix(".git") == reg["origin"].rstrip("/").removesuffix(".git"),
               "origin matches config", f"origin mismatch: repo={origin} config={reg['origin']}")
+    pkg = lib / "package.json"
+    has_dev_script = pkg.exists() and "\"dev\"" in pkg.read_text(errors="replace")
+    if has_dev_script:
+        check(reg is not None and reg.get("dev_port"), "dev port registered",
+              "has a `dev` script but no `dev_port` in config.json — two rooms guessing the same port collide silently")
     state = library_state(repo, fetch=not args.no_fetch)
     check(state["dirty_tracked"] == 0, "library is clean", f"library has {state['dirty_tracked']} modified file(s) — it should be read-only")
     check(state["behind"] == 0, "library current with origin/main", f"library {state['behind']} behind origin/main — `sync`")
