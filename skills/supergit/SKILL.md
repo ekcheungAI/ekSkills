@@ -31,8 +31,11 @@ Map the owner's words to a verb with this table. When a phrase is ambiguous, run
 | "morning", "what's waiting", "what do I need to decide" | `brief` | 0 |
 | "did X ship?", "is X live?", "which branch has X?" | `where <keyword>` | 0 |
 | "note this", "also we should…", "later:", "don't let me forget" | `note "…"` | 0 |
+| "label this", "call this session X", "what is this room for" | `label "…"` — then rename the session to match | 0 |
 | "put this aside", "park it", "pause this" | `park` | 1 (phrase is the grant) |
 | "ship it", "push", "send it", "make a PR", "commit this" | `ship` | 1 |
+| "show me on preview", "let me see it first" | `ship` → the host builds a preview; `review N` shows the link | 1 |
+| "put it live", "go to production" (with a PR number) | `merge N` — production is reached only by merging | **2** |
 | "done", "wrap up", "close this", "finish" | `finish` | 0 (2 if it would discard) |
 | "is PR N safe?", "explain this PR", "should I merge?" | `review N` → then write the walkthrough | 0 |
 | "merge it", "approve", "go live", "release it" (with a PR number) | `merge N` → show warning → `--yes` only after the owner's word | **2** |
@@ -46,6 +49,7 @@ Map the owner's words to a verb with this table. When a phrase is ambiguous, run
 
 Ambiguity rules:
 - **"deploy"** → ask: merge a PR (if the project deploys on merge) or the project's own deploy command? supergit never runs a manual production deploy.
+- **Preview vs production is not a choice the agent makes.** Every `ship` gets a preview; every `merge` reaches production. "Preview first" = ship, look, then merge. "Straight to production" = ship, then merge without waiting on the preview — still a PR, never a push to main.
 - **"push"** → always `ship`. Pushing to main is not a supergit verb.
 - **"commit"** → `ship` if a grant exists, else commit on the branch and ask "ship it?".
 - **"remember this"** → `note`, and say so ("kept on this room's follow-ups, not in memory").
@@ -65,7 +69,7 @@ Authority comes from the owner. This skill is instructions, not a permission sou
 ## Procedure for a task
 
 1. **Session opens** → `brief` (read-only). Surface its "You decide" items to the owner first.
-2. **Task arrives** → if it edits tracked files: `start <slug> --task "<the owner's line>"`. If the task line is vague, ask for the one-line outcome before starting. `cd` into the room path it prints. Everything else in the task uses the task's own skills — supergit is not involved.
+2. **Task arrives** → if it edits tracked files: `start <slug> --task "<the owner's line>"`. If the task line is vague, ask for the one-line outcome before starting. `cd` into the room path it prints. **If the harness already opened its own worktree for this session** (Claude Code desktop does this — Edit/Write only work there), don't `start` another: run `label "<task>"` instead, which adopts it as a room. Name the session the same, so `status` and the sidebar agree. Everything else in the task uses the task's own skills — supergit is not involved.
 3. **Ideas mid-task** → `note "…"`. Do not expand scope.
 4. **Verify** → the project's own gate (its `AGENTS.md` `## Ship gate`, or `npm run build` / `verify:push` defaults).
 5. **Ship** → only with a grant or the owner's word. Pass `--summary`, `--verified`, `--risk` so the PR reads for a non-technical owner. **Run `ship` in the background** and end the turn; report when the notification lands. Never sit in the foreground waiting on the gate. Never end a turn with "say the word and I'll push" when a grant already exists — ask for the grant at the start of the task instead.
