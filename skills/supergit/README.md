@@ -6,6 +6,8 @@ You say *start on X · ship it · is PR 42 safe? · merge it · done · clean up
 
 It works with Claude Code, Codex, Cursor, or any agent that can run a script and read a `SKILL.md`. One Python file, no dependencies.
 
+**[Read the interactive guide →](https://claude.ai/code/artifact/5e0b8be4-14d7-438f-b7a1-92b8656bdce7)** — when to use it, what to say, and the full term sheet below, in English and Traditional Chinese.
+
 ## Install
 
 ```bash
