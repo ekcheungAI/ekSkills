@@ -77,6 +77,8 @@ Every verb accepts `--json`. Every reply ends **Done / Waiting / You decide**.
 | **Sync** | Bring the library up to the latest merged state. Safe by construction — it can never lose work. | fast-forward |
 | **Park** | Save work-in-progress to its branch and pause. The room stays. | WIP commit + push |
 | **Note** | A thought you want kept but not acted on now. Surfaces later as "follow-ups". | — |
+| **Label** | The one name a piece of work goes by: on the room, on the session, and as a `Supergit-Room:` trailer on every commit it ships. `label "…"` sets it — a harness-made worktree (Claude Code opens its own per session) becomes a room the first time it's labelled. | sidecar `task` |
+| **Direct push** | A commit that reached the library's main branch without a PR — nothing reviewed it, nothing gated it. `audit` lists any from the last 24h; `brief` counts them. | push to `main` |
 | **Rescue branch** | A backup branch made before a room is removed, so nothing is ever lost. | `rescue/*` |
 | **Foreign room** | A room the steward didn't create. Reported, never touched unless you say so. | — |
 | **TTL** | How long an idle, clean, shipped room may sit before it is swept. Dirty rooms are never swept. | time-to-live |
@@ -108,8 +110,8 @@ You will really only say eight: *start · note · ship · done · what's the sta
 ### Daily — know where you are
 | Verb | Does | You say |
 |---|---|---|
-| `brief` | Morning page across all projects: PRs waiting, rooms stuck, libraries behind, production health | "morning", "what's waiting" |
-| `status` | Every room of one project: who, what, age, clean/dirty, shipped or not | "what's the state", "why is this slow" |
+| `brief` | Morning page across all projects: PRs waiting, rooms stuck, libraries behind, expired rooms a cleanup would sweep, any pair of live rooms editing the same files, and — on projects with a host — whether production runs what's on main, two production builds landing too close together, and how many previews are failing | "morning", "what's waiting" |
+| `status` | Every room of one project: who, what, age, clean/dirty, shipped or not, plus any file-level overlap between rooms with unshipped work | "what's the state", "why is this slow" |
 | `where` | Finds a feature: which room, branch, PR; merged or not; live or not | "did X ship?", "is X live?" |
 
 ### Task — the daily loop
@@ -121,6 +123,7 @@ You will really only say eight: *start · note · ship · done · what's the sta
 | `park` | Saves progress to the branch, room stays | "park it", "put this aside" |
 | `ship` | Commit → gate → push branch → PR, **in the background** | "ship it", "push" |
 | `finish` | Closes a clean, shipped room. Refuses otherwise and offers ship / park / abandon | "done", "wrap up" |
+| `label` | Names the room you're in — and adopts a harness-made worktree as a room the first time it's used | "call this X", "what is this room for" |
 
 ### Decide — only you
 | Verb | Does | You say |
@@ -165,6 +168,8 @@ No commit hashes, refs or file paths in those blocks unless you ask for details.
 | "remember this" | a note — or the agent's memory | a note, and says so |
 | "merge" with no number | — | lists open PRs with one-liners; never picks one |
 | "apply the migration" with no file | — | lists pending files; never picks one |
+| "show me on preview" | — | ships the branch; the host builds a preview automatically, `review N` shows the link |
+| "put it live" (with a PR number) | — | `merge N` — production is reached only by merging, never by a push |
 
 ---
 
@@ -187,11 +192,21 @@ Three things can drift apart: **the files** in the repo, **the ledger** in the d
 
 ## 7. The deploy layer — preview vs. production
 
+supergit reads the host's actual deployment state through GitHub's own deployments API (`gh api repos/…/deployments`) — no platform token needed, and it works for any host (Vercel, Netlify, …) that reports deployments to GitHub. This shows up automatically:
+
+- **`brief`** adds a phrase per project: `prod ✅` when production is running what's on main, `prod ⏳` while a build is presumably in flight, `prod ❌` on a failed build, `prod ⚠️ N builds in 30 min` when pushes landed close enough together to race, plus `previews ❌ N/M` and a count of commits that reached main without a PR in the last 24h.
+- **`audit`** turns those into findings, plus the last several deployments with their outcomes and links.
+- **`review N`** shows that PR's own preview build — built, failed, or still going — so you look at the actual thing before merging, not just a green checkmark.
+- **`ship`** tells you a preview is coming; **`merge`** tells you production is building and how to undo.
+
+The things reading that state doesn't replace:
+
 - **Every push to every branch builds a preview** unless you tell the platform otherwise. Backup and housekeeping branches (`rescue/*`) must be excluded by name, or you pay for builds nobody will look at and get a failure email for each.
-- **A red preview check is not proof the PR is broken.** Read the build log. A preview can fail on a limit production doesn't hit.
+- **A red preview check is not proof the PR is broken.** Read the build log — a preview can fail on a limit production doesn't hit (a function-size cap the Preview environment lacks an env var for is a common one).
 - **Merge is deploy** on most setups. The steward re-shows that warning before every merge.
-- **Production incidents:** `undo --deploy` (roll back to the previous deployment) is faster and safer than a revert PR. Use the platform's rollback; open the revert PR afterwards.
+- **Production incidents:** the platform's own rollback (to the previous deployment) is faster and safer than a revert PR. Roll back first, open the revert PR afterwards.
 - **Set a spend cap** on the platform's billing page. No agent can do this for you, and nothing else protects your card.
+- **Real branch protection** (blocking a push to main outright, not just refusing it in a local hook) may need a paid plan on some hosts — check before assuming it's available.
 
 ---
 

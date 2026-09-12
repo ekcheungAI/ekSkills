@@ -375,6 +375,158 @@ def count_processes(path: Path) -> int:
     return len([l for l in proc.stdout.splitlines() if l.strip()])
 
 
+def changed_files(path: Path) -> set[str]:
+    """Files this room's HEAD touches relative to origin/main — its own work,
+    not origin/main's drift since the room forked (three-dot, not two-dot)."""
+    out = git(["diff", "--name-only", "origin/main...HEAD"], cwd=path, check=False)
+    return {l.strip() for l in out.splitlines() if l.strip()}
+
+
+def find_overlaps(rooms: list[Room]) -> list[tuple[Room, Room, set[str]]]:
+    """Pairwise file overlap across rooms that still have live, unshipped work.
+    A room that is clean and fully pushed already left through `ship` — its
+    files stop mattering here the moment a PR exists to review instead."""
+    active = [x for x in rooms if x.kind in ("supergit", "claude-native", "foreign") and x.exists and (not x.clean or x.unpushed)]
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        file_sets = list(pool.map(lambda x: changed_files(x.path), active))
+    found = []
+    for i, a in enumerate(active):
+        for j in range(i + 1, len(active)):
+            shared = file_sets[i] & file_sets[j]
+            if shared:
+                found.append((a, active[j], shared))
+    return found
+
+
+# ----------------------------------------------------------------------------
+# deploy awareness — read through GitHub, which the host (Vercel, Netlify…)
+# writes to: one Deployment per build, one status per outcome. `gh` alone then
+# answers the three questions that matter to a non-technical owner: is
+# production running what's on main, are two production builds racing, and
+# are previews failing.
+# ----------------------------------------------------------------------------
+
+def github_slug(repo: Repo) -> str | None:
+    url = git(["remote", "get-url", "origin"], cwd=repo.library, check=False)
+    m = re.search(r"github\.com[:/]([^/\s]+)/([^/\s]+?)(?:\.git)?/?$", url)
+    return f"{m.group(1)}/{m.group(2)}" if m else None
+
+
+def gh_json(args: list[str], cwd: Path, timeout: int = 30):
+    proc = sh(["gh", *args], cwd=cwd, check=False, timeout=timeout)
+    if proc.returncode != 0 or not (proc.stdout or "").strip():
+        return None
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return None
+
+
+def deploy_capable(repo: Repo) -> bool:
+    lib = repo.library
+    return any((lib / p).exists() for p in ("vercel.json", ".vercel", "netlify.toml", "railway.json", "fly.toml"))
+
+
+def deploy_state(repo: Repo, limit: int = 12) -> dict | None:
+    """Returns None when the repo has no host, no GitHub origin, or no `gh`."""
+    slug = github_slug(repo)
+    if not slug or not has("gh") or not deploy_capable(repo):
+        return None
+    deps = gh_json(["api", f"repos/{slug}/deployments?per_page={limit}"], repo.library)
+    if not isinstance(deps, list):
+        return None
+
+    def with_status(d: dict) -> dict:
+        st = gh_json(["api", f"repos/{slug}/deployments/{d['id']}/statuses?per_page=1"], repo.library, timeout=20)
+        s = st[0] if isinstance(st, list) and st else {}
+        return {"env": (d.get("environment") or "").lower(), "sha": d.get("sha") or "", "created": d.get("created_at"),
+                "state": s.get("state") or "pending", "url": s.get("environment_url") or s.get("target_url")}
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        rows = list(pool.map(with_status, deps))
+    prod = [x for x in rows if x["env"] == "production"]
+    prev = [x for x in rows if x["env"] == "preview"]
+    live = next((x for x in prod if x["state"] == "success"), None)
+    head = git(["rev-parse", "origin/main"], cwd=repo.library, check=False)
+    head_age_min = None
+    ts = git(["log", "-1", "--format=%ct", "origin/main"], cwd=repo.library, check=False)
+    if ts.isdigit():
+        head_age_min = (time.time() - int(ts)) / 60
+    # Vercel writes the GitHub record when a build FINISHES, so an in-flight
+    # production build is invisible here. A main that moved in the last 25 min
+    # is therefore "probably building", not "nothing is building".
+    head_probably_building = head_age_min is not None and head_age_min < 25 and not (live and live["sha"] == head)
+    # Racing = two production builds that finished within 30 min of each other:
+    # two pushes hit main in quick succession, and the later finish wins.
+    times = sorted((parse_iso(x["created"].replace("Z", "+00:00")) for x in prod if x.get("created")), reverse=True)
+    burst = sum(1 for t in times if (times[0] - t).total_seconds() < 1800) if times else 0
+    return {
+        "slug": slug, "head": head, "rows": rows, "head_age_min": head_age_min,
+        "production": prod[0] if prod else None,          # newest finished production build, whatever its outcome
+        "live": live,                                      # newest production build that succeeded
+        "burst": burst,                                    # production builds inside the last 30-min window
+        "head_deployed": bool(live and live["sha"] == head),
+        "head_building": head_probably_building,
+        "preview_failed": sum(1 for x in prev[:10] if x["state"] in ("failure", "error")),
+        "preview_seen": min(len(prev), 10),
+    }
+
+
+def deploy_summary(ds: dict | None) -> str:
+    """One short phrase for a brief line; '' when there is nothing to say."""
+    if not ds or not ds["rows"]:
+        return ""
+    p = ds["production"]
+    if ds["burst"] > 1:
+        s = f"prod ⚠️ {ds['burst']} builds in 30 min"
+    elif p and p["state"] in ("failure", "error"):
+        s = f"prod ❌ last build failed ({p['sha'][:7]})"
+    elif ds["head_deployed"]:
+        s = "prod ✅"
+    elif ds["head_building"]:
+        s = f"prod ⏳ main moved {ds['head_age_min']:.0f}m ago, build likely in flight"
+    elif ds["live"]:
+        s = f"prod ⚠️ on {ds['live']['sha'][:7]}, main is {ds['head'][:7]}"
+    else:
+        s = "prod ? no successful build recorded"
+    if ds["preview_failed"] >= 3:
+        s += f" · previews ❌ {ds['preview_failed']}/{ds['preview_seen']}"
+    return s
+
+
+def direct_pushes(repo: Repo, n: int = 15) -> list[tuple[str, str]]:
+    """Commits on origin/main that never went through a pull request.
+    Squash merges leave the PR's merge commit on main; a merge-commit strategy
+    leaves the PR's own commits — GitHub's commits/{sha}/pulls covers both."""
+    slug = github_slug(repo)
+    if not slug or not has("gh"):
+        return []
+    merged = gh_json(["pr", "list", "--state", "merged", "--limit", "100", "--json", "mergeCommit"], repo.library) or []
+    via_pr = {(m.get("mergeCommit") or {}).get("oid") for m in merged}
+    log = git(["log", "--no-merges", "--format=%H %s", "-n", str(n), "--since=24.hours", "origin/main"], cwd=repo.library, check=False)
+    candidates = []
+    for line in log.splitlines():
+        sha, _, subject = line.partition(" ")
+        if sha and sha not in via_pr and not re.search(r"\(#\d+\)\s*$", subject):
+            candidates.append((sha, subject))
+    if not candidates:
+        return []
+
+    def has_pr(item):
+        prs = gh_json(["api", f"repos/{slug}/commits/{item[0]}/pulls"], repo.library, timeout=20)
+        return bool(prs)
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        flags = list(pool.map(has_pr, candidates))
+    return [(sha[:8], subj) for (sha, subj), ok in zip(candidates, flags) if not ok]
+
+
+def preview_for(ds: dict | None, sha: str) -> dict | None:
+    if not ds or not sha:
+        return None
+    return next((x for x in ds["rows"] if x["env"] == "preview" and x["sha"] == sha), None)
+
+
 def library_state(repo: Repo, fetch: bool = True) -> dict:
     lib = repo.library
     if fetch:
@@ -453,6 +605,16 @@ def verb_status(args) -> Report:
     if sweepable:
         r.detail.append(f"   → `cleanup` would remove {len(sweepable)} expired clean room(s)")
 
+    overlaps = find_overlaps(others)
+    if overlaps:
+        r.detail.append("")
+        r.detail.append(f"⚠️  {len(overlaps)} pair(s) of rooms touch the same file(s):")
+        for a, b, shared in overlaps:
+            sample = ", ".join(sorted(shared)[:4]) + ("…" if len(shared) > 4 else "")
+            r.detail.append(f"   `{a.label}` × `{b.label}` — {sample}")
+        for a, b, shared in overlaps[:2]:
+            r.decide.append(f"`{a.label}` and `{b.label}` both touch {len(shared)} file(s) — same task, or will one conflict the other on ship?")
+
     if lib["ahead"] and lib["unique_ahead"] == 0:
         r.detail.append(f"   ℹ️ the {lib['ahead']} local commit(s) already exist on origin in equivalent form — `sync --reset-equivalent` is lossless")
     if lib["behind"] and not lib["dirty_tracked"] and not lib["ahead"]:
@@ -515,7 +677,7 @@ def verb_start(args) -> Report:
     # overlap check
     existing = [x for x in list_rooms(repo, probe=False) if x.kind in ("supergit", "claude-native")]
     words = set(slug.split("-"))
-    overlaps = [x for x in existing if words & set(slugify(x.label).split("-")) - {"fix", "update", "new", "the"}]
+    overlaps = [x for x in existing if words & set(slugify(x.label).split("-")) - {"fix", "update", "new", "the", "push", "gate", "release", "refactor", "cleanup", "tidy", "and", "for", "to"}]
     if overlaps and not args.force:
         for x in overlaps:
             r.detail.append(f"   existing room looks related: {room_line(x)}")
@@ -598,6 +760,21 @@ def require_room(repo: Repo) -> dict:
     return sc
 
 
+def verb_label(args) -> Report:
+    """Give the current room a task name. Claude Code makes its own worktree per
+    session and never calls `start`, so without this the room shows up in
+    `status` as a bare folder name and nobody can tell what it was for."""
+    repo = find_repo()
+    sc = require_room(repo)
+    old = sc.get("task")
+    sc["task"] = args.text.strip()
+    save_sidecar(repo, sc)
+    r = Report()
+    r.done.append(f"room `{sc['slug']}` is now labelled “{sc['task'][:60]}”" + (f" (was “{old[:40]}”)" if old and old != sc["task"] else ""))
+    r.done.append("name the session the same way, so the sidebar and `status` agree")
+    return r
+
+
 def verb_note(args) -> Report:
     repo = find_repo()
     sc = require_room(repo)
@@ -621,10 +798,10 @@ def commit_room(repo: Repo, sc: dict, message: str, trailer: str | None) -> str 
     return git(["rev-parse", "--short", "HEAD"], cwd=room)
 
 
-def push_branch(room: Path, branch: str, gate_cb) -> tuple[bool, str]:
+def push_branch(room: Path, branch: str, gate_cb, env: dict | None = None) -> tuple[bool, str]:
     """Push with one rebase retry. Returns (ok, note)."""
     for attempt in (1, 2):
-        proc = sh(["git", "push", "-u", "origin", f"HEAD:refs/heads/{branch}"], cwd=room, check=False, timeout=1800)
+        proc = sh(["git", "push", "-u", "origin", f"HEAD:refs/heads/{branch}"], cwd=room, check=False, timeout=1800, env=env)
         if proc.returncode == 0:
             return True, "pushed" if attempt == 1 else "pushed after one rebase"
         err = (proc.stderr or "") + (proc.stdout or "")
@@ -663,7 +840,7 @@ def verb_park(args) -> Report:
     if sha:
         r.done.append(f"saved as {sha}")
     branch = sc.get("branch") or git(["branch", "--show-current"], cwd=repo.cwd_top)
-    ok, note = push_branch(repo.cwd_top, branch, lambda: (True, "no gate on park"))
+    ok, note = push_branch(repo.cwd_top, branch, lambda: (True, "no gate on park"), env={"SUPERGIT_SKIP_GATE": "1"})
     r.done.append(f"branch {branch}: {note}" if ok else f"could not push: {note}")
     r.done.append("room stays — come back any time")
     return r
@@ -680,7 +857,11 @@ def verb_ship(args) -> Report:
 
     gate = read_ship_gate(repo.library)
     message = args.message or sc["task"]
-    sha = commit_room(repo, sc, message, args.trailer or os.environ.get("SUPERGIT_TRAILER"))
+    trailer = f"Supergit-Room: {sc['slug']}"
+    extra = args.trailer or os.environ.get("SUPERGIT_TRAILER")
+    if extra:
+        trailer = f"{extra}\n{trailer}"
+    sha = commit_room(repo, sc, message, trailer)
     r.done.append(f"committed {sha}" if sha else "nothing new to commit")
 
     ok, note = run_gate(room, gate, args.skip_gate)
@@ -707,7 +888,12 @@ def verb_ship(args) -> Report:
     save_sidecar(repo, sc)
     r.data = {"branch": branch, "pr": pr_url}
     if pr_url:
-        r.decide.append(f"review and merge? → `supergit review {pr_url.rsplit('/', 1)[-1]}`")
+        n = pr_url.rsplit("/", 1)[-1]
+        if deploy_capable(repo):
+            r.waiting.append(f"preview build for {branch} — the host starts it on its own; `review {n}` shows the link when it's ready")
+            r.decide.append(f"look at the preview, then merge? → `supergit review {n}`")
+        else:
+            r.decide.append(f"review and merge? → `supergit review {n}`")
     return r
 
 
@@ -1002,12 +1188,24 @@ def verb_brief(args) -> Report:
         lib = library_state(repo, fetch=not args.no_fetch)
         rooms = [x for x in list_rooms(repo) if x.kind != "library"]
         stuck = [x for x in rooms if x.kind in ("supergit", "claude-native") and x.expired and (not x.clean or x.unpushed)]
+        sweepable = [x for x in rooms if x.kind == "supergit" and x.expired and x.clean and x.unpushed == 0 and x.processes == 0]
+        overlaps = find_overlaps(rooms)
         line = f"   {p['id']:<14} lib {lib['behind']}↓/{lib['ahead']}↑"
         if lib["dirty_tracked"]:
             line += f" ⚠️dirty({lib['dirty_tracked']})"
         line += f" · rooms {len(rooms)}"
         if stuck:
             line += f" ({len(stuck)} stuck)"
+        if sweepable:
+            line += f" · {len(sweepable)} sweepable"
+        if overlaps:
+            line += f" · ⚠️{len(overlaps)} overlapping"
+        ds = deploy_state(repo)
+        pushes = direct_pushes(repo) if ds else []
+        if ds:
+            line += " · " + deploy_summary(ds)
+        if pushes:
+            line += f" · ⚠️ {len(pushes)} direct push(es) to main"
         prs = []
         if has("gh") and not args.no_fetch:
             proc = sh(["gh", "pr", "list", "--json", "number,title,createdAt,url,statusCheckRollup,isDraft", "--limit", "20"],
@@ -1027,6 +1225,22 @@ def verb_brief(args) -> Report:
                 r.decide.append(f"{p['id']} PR #{pr['number']} open {age/24:.0f}d, checks green — merge? (`review {pr['number']}`)")
         for x in stuck[:2]:
             r.decide.append(f"{p['id']} room `{x.label}` stuck — ship, park, or abandon?")
+        if ds:
+            prod = ds["production"]
+            if prod and prod["state"] in ("failure", "error"):
+                r.decide.append(f"{p['id']}: production build FAILED for {prod['sha'][:7]} — read the log (`audit`), then fix-forward or `undo`?")
+            elif ds["burst"] > 1:
+                r.decide.append(f"{p['id']}: {ds['burst']} production builds inside 30 min — separate pushes hit main back-to-back; is production on the one you meant? (`audit`)")
+            elif ds["live"] and not ds["head_deployed"] and not ds["head_building"]:
+                r.decide.append(f"{p['id']}: main is ahead of production and nothing is building — did a build fail silently? (`audit`)")
+            if ds["preview_failed"] >= 5:
+                r.decide.append(f"{p['id']}: previews failing {ds['preview_failed']} of last {ds['preview_seen']} — read one build log before shipping more")
+        for sha, subject in pushes[:2]:
+            r.decide.append(f"{p['id']}: `{sha}` landed on main WITHOUT a PR — “{subject[:50]}”. Who pushed it, and should it have been a ship?")
+        if sweepable and not stuck:
+            r.decide.append(f"{p['id']}: {len(sweepable)} room(s) expired & clean — `clean up`?")
+        for a, b, shared in overlaps[:1]:
+            r.decide.append(f"{p['id']}: `{a.label}` and `{b.label}` touch {len(shared)} shared file(s) — worth a look before either ships")
         if lib["behind"] and not lib["dirty_tracked"] and not lib["ahead"]:
             r.decide.append(f"{p['id']} library {lib['behind']} behind — `sync`? (yes/no)")
         if lib["dirty_tracked"]:
@@ -1041,19 +1255,30 @@ def verb_review(args) -> Report:
         raise SupergitError("GitHub CLI `gh` is required for review")
     r = Report()
     proc = sh(["gh", "pr", "view", str(args.pr), "--json",
-               "number,title,url,author,baseRefName,headRefName,mergeable,mergeStateStatus,isDraft,additions,deletions,changedFiles,files,body,statusCheckRollup,createdAt"],
+               "number,title,url,author,baseRefName,headRefName,headRefOid,mergeable,mergeStateStatus,isDraft,additions,deletions,changedFiles,files,body,statusCheckRollup,createdAt"],
               cwd=repo.library, timeout=60)
     pr = json.loads(proc.stdout)
     gate = read_ship_gate(repo.library)
     checks = pr.get("statusCheckRollup") or []
     failing = [c for c in checks if c.get("conclusion") not in ("SUCCESS", "NEUTRAL", "SKIPPED", None)]
     behind = pr.get("mergeStateStatus") == "BEHIND"
-    r.data = {"pr": pr, "gate": gate, "behind": behind, "failing_checks": failing}
+    ds = deploy_state(repo)
+    preview = preview_for(ds, pr.get("headRefOid", ""))
+    r.data = {"pr": pr, "gate": gate, "behind": behind, "failing_checks": failing, "preview": preview}
     r.detail.append(f"🔍 PR #{pr['number']} — {pr['title']}")
     r.detail.append(f"   {pr['url']}")
     r.detail.append(f"   by {pr['author'].get('login')} · {pr['headRefName']} → {pr['baseRefName']} · +{pr['additions']} −{pr['deletions']} in {pr['changedFiles']} file(s)")
     r.detail.append(f"   mergeable: {pr.get('mergeable')} · state: {pr.get('mergeStateStatus')} · draft: {pr.get('isDraft')}")
     r.detail.append(f"   checks: {len(checks)} ({len(failing)} failing)" + (" · CI may be billing-blocked — the local ship gate is the real check" if not checks else ""))
+    if ds:
+        if preview and preview["state"] == "success":
+            r.detail.append(f"   preview: ✅ {preview.get('url')}  ← look here before merging")
+        elif preview and preview["state"] in ("failure", "error"):
+            r.detail.append(f"   preview: ❌ build failed — {preview.get('url')} (a preview-only failure is not proof the code is broken; read the log)")
+        elif preview:
+            r.detail.append("   preview: ⏳ still building — check again in a few minutes")
+        else:
+            r.detail.append("   preview: none recorded for this commit yet")
     if gate.get("merge_deploys"):
         r.detail.append(f"   ⚠️ merging deploys to {gate['merge_deploys']}")
     r.detail.append("   files:")
@@ -1131,6 +1356,7 @@ def verb_merge(args) -> Report:
     r.done.append(f"PR #{pr['number']} merged (squash), branch deleted")
     if deploy:
         r.done.append(f"→ this deploys to {deploy}")
+        r.waiting.append(f"{deploy} build for the merge commit — `brief` shows `prod ✅` once it is live; `undo {pr['number']}` if it goes wrong")
 
     # library sync
     try:
@@ -1288,10 +1514,36 @@ def verb_audit(args) -> Report:
     check(not nested, "no nested gate trees", f"{len(nested)} nested worktree(s) — `cleanup --go`")
     check(len(rooms) <= 8, f"{len(rooms)} room(s)", f"{len(rooms)} rooms — `cleanup`")
 
+    # deploy — what the host actually did with main, and what reached main without review
+    ds = deploy_state(repo)
+    pushes: list[tuple[str, str]] = []
+    if ds:
+        prod = ds["production"]
+        check(not (prod and prod["state"] in ("failure", "error")), "last production build succeeded",
+              f"last production build FAILED ({prod['sha'][:7] if prod else '?'}) — {prod.get('url') if prod else ''}", "FAIL")
+        check(ds["burst"] <= 1, "one production build per half hour",
+              f"{ds['burst']} production builds inside 30 min — pushes to main are landing back-to-back; the last to finish wins")
+        check(ds["head_deployed"] or ds["head_building"], "production is on origin/main",
+              f"production is on {ds['live']['sha'][:7] if ds['live'] else '?'} but main has been at {ds['head'][:7]} for {ds['head_age_min'] or 0:.0f} min — the build for it failed or never started")
+        check(ds["preview_failed"] < 3, f"previews healthy ({ds['preview_failed']}/{ds['preview_seen']} failed)",
+              f"previews failing: {ds['preview_failed']} of the last {ds['preview_seen']} — read one build log; a preview-only failure is usually an env var missing from the Preview environment")
+        pushes = direct_pushes(repo)
+        check(not pushes, "every commit on main in the last 24h came through a PR",
+              f"{len(pushes)} commit(s) reached main WITHOUT a PR in the last 24h: " + "; ".join(f"{s} “{t[:40]}”" for s, t in pushes[:4]))
+    elif deploy_capable(repo):
+        check(False, "", "host deployments unreadable — `gh` missing, origin not GitHub, or the integration records nothing")
+
     r.detail.append(f"🩺 audit — {repo.name}")
     for level, msg in findings:
         if level != "PASS":
             r.detail.append(f"   {level}  {msg}")
+    if ds:
+        r.detail.append("")
+        live = ds["live"]
+        r.detail.append(f"🚀 deploy — production {('on ' + live['sha'][:7] + ' · ' + (live.get('url') or '')) if live else 'no successful build recorded'} · main {ds['head'][:7]}")
+        for x in ds["rows"][:6]:
+            mark = {"success": "✅", "failure": "❌", "error": "❌"}.get(x["state"], "⏳")
+            r.detail.append(f"   {mark} {x['env']:<10} {x['sha'][:7]}  {x['state']:<11} {x.get('url') or ''}")
     passed = sum(1 for l, _ in findings if l == "PASS")
     r.done.append(f"{passed} passed, {sum(1 for l, _ in findings if l == 'FAIL')} failed, {sum(1 for l, _ in findings if l == 'WARN')} warnings")
     fails = [m for l, m in findings if l == "FAIL"]
@@ -1367,6 +1619,7 @@ Daily        brief [project]           morning page across all registered projec
 
 Task         start <slug> [--task ..] [--grant-ship] [--ttl 12]     new room from origin/main
              note "<text>"             keep a thought on this room (surfaces at ship/finish)
+             label "<text>"            name the room you are in (a harness-made worktree is adopted on first use)
              park                      WIP commit + push branch; room stays
              ship [-m ..] [--summary ..] [--verified ..] [--risk ..] [--no-pr]    commit → gate → push → PR
              finish [--keep-branch] [--dry-run]                     close a clean, shipped room
@@ -1407,6 +1660,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--grant-ship", dest="grant_ship", action="store_true"); s.add_argument("--ttl", type=int, default=DEFAULT_TTL_HOURS)
     s.add_argument("--no-deps", action="store_true"); s.add_argument("--force", action="store_true")
     s = add("note", verb_note); s.add_argument("text")
+    s = add("label", verb_label); s.add_argument("text")
     s = add("park", verb_park); s.add_argument("-m", "--message"); s.add_argument("--trailer")
     s = add("ship", verb_ship); s.add_argument("-m", "--message"); s.add_argument("--title"); s.add_argument("--trailer")
     s.add_argument("--summary"); s.add_argument("--verified"); s.add_argument("--risk"); s.add_argument("--body-file")
