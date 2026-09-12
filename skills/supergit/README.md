@@ -82,6 +82,7 @@ Every verb accepts `--json`. Every reply ends **Done / Waiting / You decide**.
 | **Rescue branch** | A backup branch made before a room is removed, so nothing is ever lost. | `rescue/*` |
 | **Foreign room** | A room the steward didn't create. Reported, never touched unless you say so. | — |
 | **TTL** | How long an idle, clean, shipped room may sit before it is swept. Dirty rooms are never swept. | time-to-live |
+| **Dev port** | The port a project's local dev server runs on — one registered base port per project (`dev_port` in `config.json`), so two projects never default to the same one. `status`/`brief` read what a room's own processes are *actually* listening on via `lsof`, not what anyone assumes, and flag two rooms of the same project showing the identical port — only one can really own it. | `dev_port`, `lsof -iTCP -sTCP:LISTEN` |
 | **Ledger** | The database's own record of which migrations have been applied. | `schema_migrations` |
 | **Migration** | One file describing one change to the database. Its filename carries a timestamp. | SQL migration |
 | **Preview / Production** | A build of a branch for looking at, vs. the live site. Both cost build minutes. | deployment target |
@@ -111,7 +112,7 @@ You will really only say eight: *start · note · ship · done · what's the sta
 | Verb | Does | You say |
 |---|---|---|
 | `brief` | Morning page across all projects: PRs waiting, rooms stuck, libraries behind, expired rooms a cleanup would sweep, any pair of live rooms editing the same files, and — on projects with a host — whether production runs what's on main, two production builds landing too close together, and how many previews are failing | "morning", "what's waiting" |
-| `status` | Every room of one project: who, what, age, clean/dirty, shipped or not, plus any file-level overlap between rooms with unshipped work | "what's the state", "why is this slow" |
+| `status` | Every room of one project: who, what, age, clean/dirty, shipped or not, plus any file-level overlap and any port collision between rooms | "what's the state", "why is this slow" |
 | `where` | Finds a feature: which room, branch, PR; merged or not; live or not | "did X ship?", "is X live?" |
 
 ### Task — the daily loop
@@ -138,7 +139,7 @@ You will really only say eight: *start · note · ship · done · what's the sta
 |---|---|---|
 | `sync` | Library ← latest. Refuses if the library is dirty and says who/what. | "sync", "get latest" |
 | `cleanup` | Dry run first. Sweeps expired clean rooms, deletes merged branches, flags junk. | "clean up", "too many branches" |
-| `audit` | Structure + git + database + deploy health. Reports; never moves or deletes files. | "is this organised?", "check my setup" |
+| `audit` | Structure + git + database + deploy health, including whether a project with a `dev` script has a registered `dev_port`. Reports; never moves or deletes files. | "is this organised?", "check my setup" |
 | `init` | Sets a new project up the same way every time (rules file, gate, ignores, hooks) | "set up a new project" |
 | `migrate` | Applies ONE database migration file, with the file's timestamp as the ledger version, in one transaction. `--check` runs it and rolls back. | "apply this migration" |
 
