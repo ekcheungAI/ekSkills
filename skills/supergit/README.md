@@ -10,6 +10,14 @@ It works with Claude Code, Codex, Cursor, or any agent that can run a script and
 
 ## Install
 
+**With GitHub CLI 2.90+** (`gh --version` to check; `brew upgrade gh` or your package manager if older): `gh skill install` implements the open [Agent Skills spec](https://agentskills.io) this repo already follows, and pins the install to a git SHA — an upgrade is something you ask for, not something that happens under you.
+
+```bash
+gh skill install ekcheungAI/ekSkills supergit --agent claude-code   # or: codex, cursor
+```
+
+**Otherwise**, install it by hand — same result, no `gh` version requirement:
+
 ```bash
 # 1. put the skill where your agent reads skills (Claude Code shown; Codex: ~/.codex/skills)
 git clone https://github.com/ekcheungAI/ekSkills.git
@@ -22,7 +30,7 @@ ln -s "$(pwd)/ekSkills/skills/supergit" ~/.claude/skills/supergit
 #    merge hooks/claude-settings.snippet.json into ~/.claude/settings.json
 ```
 
-`init` writes an `AGENTS.md` with the eight agent rules (see §8 below) and a `## Ship gate` section, adds `.claude/worktrees/` to `.gitignore`, and lists the project in `config.json`. Then say **"start on …"** to your agent.
+Either way, `init` writes an `AGENTS.md` with the eight agent rules (see §8 below) and a `## Ship gate` section, adds `.claude/worktrees/` to `.gitignore`, and lists the project in `config.json`. Then say **"start on …"** to your agent.
 
 > **The one rule:** the library is not a desk. Every problem this skill prevents — lost work, "which version is live?", agents overwriting each other, 100 stale copies, a database nobody can describe — comes from people and agents working directly in the main folder.
 
