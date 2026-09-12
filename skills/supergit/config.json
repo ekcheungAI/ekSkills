@@ -1,0 +1,7 @@
+{
+  "_comment": "projects: every repo supergit stewards (`supergit init <path> --register` adds one). guarded_libraries: main checkouts the Claude Code PreToolUse hook refuses to edit outside a room; SUPERGIT_GUARD_ALL=1 guards every listed project. SUPERGIT_PROJECTS=/a:/b adds projects without editing this file.",
+  "projects": [],
+  "guarded_libraries": [],
+  "default_ttl_hours": 12,
+  "rooms_dir": ".claude/worktrees"
+}
