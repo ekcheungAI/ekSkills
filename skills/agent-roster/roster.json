@@ -1,0 +1,80 @@
+{
+  "$comment": "Explicit allowlist of adapted Agency Agents roles. Wrappers in claude/ and codex/ are generated from this file by scripts/build_agent_roster.py; edit profile.md and this file, then regenerate.",
+  "upstream": {
+    "repo": "https://github.com/msitarzewski/agency-agents",
+    "revision": "ad9264e309bd5e5422c04784372d7841b1e5d604",
+    "license": "MIT"
+  },
+  "roles": [
+    {
+      "slug": "product-manager",
+      "display": "Product Manager",
+      "group": "pm",
+      "upstream": "product/product-manager.md",
+      "description": "Turn a clear ask into a PM brief and executable work packages with acceptance criteria. Use only when explicitly asked for the product-manager role; scoping conversations belong to your own intake process. Advisory, never edits code or ships."
+    },
+    {
+      "slug": "ux-researcher",
+      "display": "UX Researcher",
+      "group": "ux-ui",
+      "upstream": "design/design-ux-researcher.md",
+      "description": "Walk a flow and report friction with observed/reported/simulated/assumed evidence tags and next research. Use only when explicitly asked for the ux-researcher role. Advisory, read-only."
+    },
+    {
+      "slug": "ui-designer",
+      "display": "UI Designer",
+      "group": "ux-ui",
+      "upstream": "design/design-ui-designer.md",
+      "description": "Produce implementable UI direction (hierarchy, tokens, components, all states) inside the existing brand system. Use only when explicitly asked for the ui-designer role. Never edits production code or ships."
+    },
+    {
+      "slug": "ui-finish-gate-reviewer",
+      "display": "UI Finish-Gate Reviewer",
+      "group": "ux-ui",
+      "upstream": "design/design-ui-finish-gate-reviewer.md",
+      "description": "Review the implemented UI in the running preview for specificity and finish; report blocks/should-fix/notes with screenshots and verification conditions. Use only when explicitly asked for the ui-finish-gate-reviewer role. Read-only, not the merge gate."
+    },
+    {
+      "slug": "software-architect",
+      "display": "Software Architect",
+      "group": "structure",
+      "upstream": "engineering/engineering-software-architect.md",
+      "description": "Answer a bounded architecture question with options, tradeoffs, a recommendation and an ADR-style decision record. Use only when explicitly asked for the software-architect role. Advisory, never implements."
+    },
+    {
+      "slug": "workflow-architect",
+      "display": "Workflow Architect",
+      "group": "structure",
+      "upstream": "specialized/specialized-workflow-architect.md",
+      "description": "Map a complete workflow tree: happy path, branches, failure modes, recovery, handoff contracts, observable states. Use only when explicitly asked for the workflow-architect role. Advisory, never implements."
+    },
+    {
+      "slug": "codebase-onboarding-engineer",
+      "display": "Codebase Onboarding Engineer",
+      "group": "structure",
+      "upstream": "engineering/engineering-codebase-onboarding-engineer.md",
+      "description": "Explain an unfamiliar repo or module by tracing real code paths and citing file:line; report docs-vs-code discrepancies. Use only when explicitly asked for the codebase-onboarding-engineer role. Read-only."
+    },
+    {
+      "slug": "code-reviewer",
+      "display": "Code Reviewer",
+      "group": "review",
+      "upstream": "engineering/engineering-code-reviewer.md",
+      "description": "Mid-work mentoring review of a diff: correctness, security, maintainability, performance, tests, each finding with file:line and failure scenario. Use only when explicitly asked for the code-reviewer role. Read-only; a dedicated ship-gate reviewer, if your project has one, remains the merge gate."
+    },
+    {
+      "slug": "ai-code-security-auditor",
+      "display": "AI Code Security Auditor",
+      "group": "review",
+      "upstream": "security/security-ai-generated-code-auditor.md",
+      "description": "Security audit of agent-written code: secrets, RLS, injection sinks, auth placement, env exposure; CWE-mapped findings with fixes. Use only when explicitly asked for the ai-code-security-auditor role. Static/local checks only, read-only."
+    },
+    {
+      "slug": "reality-checker",
+      "display": "Reality Checker",
+      "group": "review",
+      "upstream": "testing/testing-reality-checker.md",
+      "description": "Independently run the feature in the local preview or CLI and report each claim as verified/not verified/broken with evidence. Use only when explicitly asked for the reality-checker role. Read-only on code, never fixes or ships."
+    }
+  ]
+}

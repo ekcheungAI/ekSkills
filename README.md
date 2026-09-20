@@ -27,6 +27,7 @@ This repo is a *curated* selection, not a dump. Two parts:
 | [`goal-setter`](skills/goal-setter/) | Turns a vague ask into a bounded, checkable task contract. | A reusable framework for scoping agent work so it stays on-rails and verifiable. |
 | [`cinematic-photo-prompts`](skills/cinematic-photo-prompts/) | Documentary "non-AI-looking" photo-prompt craft. | Lens, blocking, and lighting recipes that make generated stills read like real photographs. |
 | [`study-scraping`](skills/study-scraping/) | Public-web/social research-collection pipeline. | A structured, rate-limit-aware approach to collecting and studying source material at scale. |
+| [`agent-roster`](skills/agent-roster/) | Ten advisory specialist personas — PM, UX researcher, UI designer, UI finish-gate reviewer, software/workflow architect, codebase onboarder, code reviewer, security auditor, reality checker. | An additive-persona pattern: call a role by name for a second perspective without granting it new tools or ship/merge authority. Adapts [Agency Agents](https://github.com/msitarzewski/agency-agents) (MIT). |
 
 ## Recommended skills (third-party)
 

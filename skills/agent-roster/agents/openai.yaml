@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Roster"
+  short_description: "Ten advisory specialist personas (PM, UX/UI, structure, review)"
+  default_prompt: "Use the agent-roster skill's `reality-checker` role to independently verify this feature actually works, with evidence."
